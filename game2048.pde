@@ -1,29 +1,32 @@
 int SquareSize = 200;
 int SquarePosX = 100;
-int SquarePosY = 50;
+int SquarePosY = 120;
 int SquareN = 4;
+
+int TextGameOverSize = 125;
+int TextNumberSize = 125;
+int TextScoreSize = 40;
+
+
 boolean gameOver = false;
 Value vl = new Value();
 
 void setup() 
 {
-  size(1000, 900);
-  textSize(125);
-  textAlign(CENTER, CENTER);
+  size(1000, 970);
 } 
 
 void draw() 
 {
-  if(!gameOver) Display(vl.getValue());
-  else 
-  {
-    Display(vl.getValue());
-    DisplayGameOver();
-  }
+  Display(vl.getValue());
+  DisplayScore();
+  if(gameOver) DisplayGameOver();
 }
 
 void Display(int number[][])
 {
+  textAlign(CENTER, CENTER);
+  textSize(TextNumberSize);
   background(102);
   for(int row=0;row<SquareN;row++)
   {
@@ -40,8 +43,18 @@ void Display(int number[][])
 
 void DisplayGameOver()
 {
+  textAlign(CENTER, CENTER);
+  textSize(TextGameOverSize);
   fill(0,255,0);
   text("Game Over", width/2, height/2);
+}
+
+void DisplayScore()
+{
+  textAlign(LEFT, CENTER);
+  textSize(TextScoreSize);
+  fill(255);
+  text("Score =" + str(vl.getScore()), SquarePosX, SquarePosY/2);
 }
 
 void keyPressed() 
@@ -256,5 +269,18 @@ class Value
       }
     }
     return !canMove;
+  }
+  
+  int getScore()
+  {
+    int Score = 0;
+    for(int row=0;row<SquareN;row++)
+    {
+      for(int column=0;column<SquareN;column++)
+      {
+        if(values[row][column]!=0) Score += (int)pow(2,values[row][column]);
+      }
+    }
+    return Score;
   }
 } 
