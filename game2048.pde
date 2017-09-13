@@ -2,7 +2,7 @@ int SquareSize = 200;
 int SquarePosX = 100;
 int SquarePosY = 50;
 int SquareN = 4;
-
+boolean gameOver = false;
 Value vl = new Value();
 
 void setup() 
@@ -14,7 +14,12 @@ void setup()
 
 void draw() 
 {
-  Display(vl.getValue());
+  if(!gameOver) Display(vl.getValue());
+  else 
+  {
+    Display(vl.getValue());
+    DisplayGameOver();
+  }
 }
 
 void Display(int number[][])
@@ -33,11 +38,21 @@ void Display(int number[][])
   }
 }
 
+void DisplayGameOver()
+{
+  fill(0,255,0);
+  text("Game Over", width/2, height/2);
+}
+
 void keyPressed() 
 {
   if (key == CODED) 
   {
-    if(vl.moveValue(keyCode)) vl.addRand();
+    if(vl.moveValue(keyCode))
+    {
+      vl.addRand();
+      gameOver = vl.checkLose();
+    }
   }
 }
 
@@ -210,5 +225,36 @@ class Value
     }
     
     return moved;
+  }
+  
+  boolean checkLose()
+  {
+    boolean canMove = false;
+    for(int row=0;row<SquareN;row++)
+    {
+      for(int column=0;column<SquareN;column++)
+      {
+        if(values[row][column] == 0) canMove = true;
+      }
+    }
+    if(!canMove)
+    {
+      for(int row=0;row<SquareN;row++)
+      {
+        for(int column=1;column<SquareN;column++)
+        {
+          if(values[row][column] == values[row][column-1]) canMove = true;
+        }
+      }
+      
+      for(int column=0;column<SquareN;column++)
+      {
+        for(int row=1;row<SquareN;row++)
+        {
+          if(values[row][column] == values[row-1][column]) canMove = true;
+        }
+      }
+    }
+    return !canMove;
   }
 } 
