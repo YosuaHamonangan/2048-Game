@@ -97,18 +97,18 @@ class Value
           {
             if(!lastSame && values[lastIndex-1][column]==temp)
             {
+              moved = true;
               values[row][column] = 0;
               values[lastIndex-1][column]++;
               lastSame = true;
-              moved = true;
             }
-            else
+            else 
             {
+              if(row!=lastIndex) moved = true;
               values[row][column] = 0;
               values[lastIndex][column]=temp;
               lastIndex++;
               lastSame = false;
-              moved = true;
             }
           }
         }
@@ -134,11 +134,11 @@ class Value
             }
             else
             {
+              if(row!=lastIndex) moved = true;
               values[row][column] = 0;
               values[lastIndex][column]=temp;
               lastIndex--;
               lastSame = false;
-              moved = true;
             }
           }
         }
@@ -164,11 +164,11 @@ class Value
             }
             else
             {
+              if(column!=lastIndex) moved = true;
               values[row][column] = 0;
               values[row][lastIndex]=temp;
               lastIndex++;
               lastSame = false;
-              moved = true;
             }
           }
         }
@@ -194,11 +194,11 @@ class Value
             }
             else
             {
+              if(column!=lastIndex) moved = true;
               values[row][column] = 0;
               values[row][lastIndex]=temp;
               lastIndex--;
               lastSame = false;
-              moved = true;
             }
           }
         }
