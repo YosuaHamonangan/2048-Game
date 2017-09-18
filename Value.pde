@@ -22,6 +22,26 @@ class Value
     return values;
   }
   
+  float[] getValue_1d() 
+  {
+    int max = 0;
+    float[] values_1d = new float[SquareN*SquareN];
+    for(int row=0;row<SquareN;row++)
+    {
+      for(int column=0;column<SquareN;column++)
+      {
+        values_1d[row*SquareN + column] = values[row][column];
+        if(values[row][column]>max) max = values[row][column];
+      }
+    }
+    
+    for(int n=0;n<SquareN*SquareN;n++)
+    {
+      values_1d[n] /= max;
+    }
+    return values_1d;
+  }
+  
   void addRand()
   {
     int row;
@@ -167,12 +187,7 @@ class Value
     break;
     }
     
-    if(moved)
-    {
-      addRand();
-      return checkLose();
-    }
-    else return false;
+    return moved;
   }
   
   boolean checkLose()
@@ -206,14 +221,14 @@ class Value
     return !canMove;
   }
   
-  int getScore()
+  long getScore()
   {
-    int Score = 0;
+    long Score = 0;
     for(int row=0;row<SquareN;row++)
     {
       for(int column=0;column<SquareN;column++)
       {
-        if(values[row][column]!=0) Score += (int)pow(2,values[row][column]);
+        if(values[row][column]!=0) Score += pow(2,values[row][column]);
       }
     }
     return Score;

@@ -13,7 +13,6 @@ class Display
   {
     textAlign(CENTER, CENTER);
     textSize(TextNumberSize);
-    background(102);
     for(int row=0;row<SquareN;row++)
     {
       for(int column=0;column<SquareN;column++)
@@ -40,6 +39,20 @@ class Display
     textAlign(LEFT, CENTER);
     textSize(TextScoreSize);
     fill(255);
-    text("Score = " + str(vl.getScore()), SquarePosX, SquarePosY/2);
+    text("Score = " + str((int) vl.getScore()), SquarePosX, SquarePosY/2);
+  }
+  
+  void GenerationPopulation(int generation, int population, long maxScore)
+  {
+    textAlign(LEFT, TOP);
+    textSize(TextScoreSize);
+    fill(255);
+    text("Gen = " + str(generation), SquarePosX+250, 0);
+    
+    textAlign(LEFT, BOTTOM);
+    text("Pop = " + str(population), SquarePosX+250, SquarePosY);
+    
+    textAlign(LEFT, CENTER);
+    text("Max Scr = " + str((int)maxScore), SquarePosX+450, SquarePosY/2);
   }
 }
