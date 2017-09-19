@@ -3,7 +3,6 @@ boolean auto = true;
 Value vl = new Value();
 Display display = new Display();
 GeneticAlgorithm GA = new GeneticAlgorithm();
-int PopulationSize = GA.PopulationSize;
 int population = 0, generation = 0;
 int delay = 500;
 long maxScore = 0;
@@ -24,7 +23,7 @@ void draw()
     display.GenerationPopulation(generation, population, maxScore, fitness);
   }
   display.Board(vl.getValue());
-  display.Score();
+  display.Score(vl.getScore());
   if(gameOver) display.GameOver();
 }
 
@@ -80,16 +79,16 @@ void AI()
     long score = vl.getScore();
     if(score>maxScore) maxScore = score;
     
-    println("gen ", generation, " pop ", population, " fitness ", fitness);
+    GA.Save(generation, population);
     
     reset();
     population++;
-    if(population==PopulationSize)
+    if(population==GA.PopulationSize)
     {
-      generation++;
-      population = 0;
       GA.crossOver();
       GA.initFitness();
+      generation++;
+      population = 0;
     }
   }
 }

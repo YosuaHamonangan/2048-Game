@@ -1,5 +1,7 @@
 class GeneticAlgorithm
 {
+  DataLogging data = new DataLogging();
+  
   int PopulationSize = 20;
   float MutationRate = 0.01;
   NeuralNetwork[] NN = new NeuralNetwork[PopulationSize];
@@ -78,26 +80,27 @@ class GeneticAlgorithm
   
   void crossOver()
   {
-    int[] NbrOfLayers = NN[0].getNbrOfLayers();    
-    float[][][] wI2Hnew = new float[PopulationSize][NbrOfLayers[0]+1][NbrOfLayers[1]];
-    float[][][] wH2Onew = new float[PopulationSize][NbrOfLayers[1]+1][NbrOfLayers[2]];
+    float[][][] wI2Hnew = new float[PopulationSize][NN[0].NInput+1][NN[0].NHidden];
+    float[][][] wH2Onew = new float[PopulationSize][NN[0].NHidden+1][NN[0].NOutput];
     
     
     for(int population=0;population<PopulationSize;population++)
     {
       int[] Parents = ChooseParents();
       
-      float[][] wI2H1 = NN[Parents[0]].getwI2H();
-      float[][] wH2O1 = NN[Parents[0]].getwH2O();
+      float[][] wI2H1 = NN[Parents[0]].wI2H;
+      float[][] wH2O1 = NN[Parents[0]].wH2O;
       
-      float[][] wI2H2 = NN[Parents[1]].getwI2H();
-      float[][] wH2O2 = NN[Parents[1]].getwH2O();
+      float[][] wI2H2 = NN[Parents[1]].wI2H;
+      float[][] wH2O2 = NN[Parents[1]].wH2O;
       
-      for(int HiddenLayer=0;HiddenLayer<NbrOfLayers[1];HiddenLayer++)
+      data.SaveParent(Parents[0], Parents[1],population);
+      
+      for(int HiddenLayer=0;HiddenLayer<NN[0].NHidden;HiddenLayer++)
       { 
-        for(int InputLayer=0;InputLayer<NbrOfLayers[0]+1;InputLayer++)
+        for(int InputLayer=0;InputLayer<NN[0].NInput+1;InputLayer++)
         {
-          if(HiddenLayer<NbrOfLayers[1]/2)
+          if(HiddenLayer<NN[0].NHidden/2)
           {
             wI2Hnew[population][InputLayer][HiddenLayer] = wI2H1[InputLayer][HiddenLayer];
           }
@@ -112,12 +115,12 @@ class GeneticAlgorithm
         }
       }
       
-      for(int OutputLayer=NbrOfLayers[2]/2;OutputLayer<NbrOfLayers[2];OutputLayer++)
+      for(int OutputLayer=0;OutputLayer<NN[0].NOutput;OutputLayer++)
       {
-        for(int HiddenLayer=0;HiddenLayer<NbrOfLayers[1]+1;HiddenLayer++)
+        for(int HiddenLayer=0;HiddenLayer<NN[0].NHidden+1;HiddenLayer++)
         {
           
-          if(HiddenLayer<NbrOfLayers[1]/2)
+          if(HiddenLayer<NN[0].NHidden/2)
           {
             wH2Onew[population][HiddenLayer][OutputLayer] = wH2O1[HiddenLayer][OutputLayer];
           }
@@ -142,5 +145,11 @@ class GeneticAlgorithm
   float[] getCommand(float input[], int population)
   {
     return NN[population].FeedForward(input);
+  }
+  
+  void Save(int generation, int population)
+  {
+    data.SaveFitness(generation, population, Fitness[population]);
+    data.SaveWeigth(generation, population, NN[population].wI2H, NN[population].wH2O);
   }
 }

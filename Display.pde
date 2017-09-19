@@ -34,12 +34,12 @@ class Display
     text("Game Over", width/2, height/2);
   }
   
-  void Score()
+  void Score(long score)
   {
     textAlign(LEFT, CENTER);
     textSize(TextScoreSize);
     fill(255);
-    text("Score = " + str((int) vl.getScore()), SquarePosX, SquarePosY/2);
+    text("Score = " + str((int) score), SquarePosX, SquarePosY/2);
   }
   
   void GenerationPopulation(int generation, int population, long maxScore, double fitness)

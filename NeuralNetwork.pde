@@ -64,29 +64,9 @@ class NeuralNetwork
     return output;
   }
   
-  float[][] getwI2H()
-  {
-    return wI2H;
-  }
-  
-  float[][] getwH2O()
-  {
-    return wH2O;
-  }
-  
   void setWeight(float weightI2H[][], float weightH2O[][])
   {
-    wI2H = weightI2H;
-    wH2O = weightH2O;
+    arrayCopy(weightI2H,wI2H);
+    arrayCopy(weightH2O,wH2O);
   }
-  
-  int[] getNbrOfLayers()
-  {
-    int[] NbrOfLayers = new int[3];
-    NbrOfLayers[0] = NInput;
-    NbrOfLayers[1] = NHidden;
-    NbrOfLayers[2] = NOutput;
-    return NbrOfLayers;
-  }
-  
 }
