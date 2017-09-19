@@ -53,7 +53,7 @@ class Value
       column = floor(random(SquareN));
     }while(values[row][column]!=0);
     
-    if(random(1)<0.7) values[row][column]++;
+    if(random(1)<0.9) values[row][column]++;
     else values[row][column]+=2;
   }
   

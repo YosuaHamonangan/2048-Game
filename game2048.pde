@@ -7,20 +7,21 @@ int PopulationSize = GA.PopulationSize;
 int population = 0, generation = 0;
 int delay = 500;
 long maxScore = 0;
+double fitness = 0;
 
 void setup() 
 {
-  size(1000, 970);
+  size(1300, 970);
 } 
 
 void draw() 
 {
   background(102);
-  if(auto && !gameOver) 
+  if(auto) 
   {
     delay(delay);
     AI();
-    display.GenerationPopulation(generation, population, maxScore);
+    display.GenerationPopulation(generation, population, maxScore, fitness);
   }
   display.Board(vl.getValue());
   display.Score();
@@ -37,7 +38,7 @@ void keyPressed()
        gameOver = vl.checkLose();
      }
   }
-  if(key == ' ') reset();
+  if(key == ' ') AI();;
   if(key == '1') delay = 500;;
   if(key == '2') delay = 0;;
 }
@@ -52,8 +53,8 @@ void AI()
 {
   float command[] = GA.getCommand(vl.getValue_1d(),population);
   boolean moved = false;
-  int counter = 0;
-  while(!moved && counter<4)
+  int retry = 0;
+  while(!moved && retry<4)
   {
     float max = 0;
     int index = 0;
@@ -66,11 +67,11 @@ void AI()
       }
     }
     command[index] = 0;
-    //println(index);
-    //println(command);
     moved = vl.moveValue(37+index);
+    retry++;
   }
   
+  fitness = GA.setFitness(vl.getValue(),population,retry-1);
   vl.addRand();
   gameOver = vl.checkLose();
   
@@ -78,7 +79,9 @@ void AI()
   {
     long score = vl.getScore();
     if(score>maxScore) maxScore = score;
-    GA.setFitness(score,population);
+    
+    println("gen ", generation, " pop ", population, " fitness ", fitness);
+    
     reset();
     population++;
     if(population==PopulationSize)
@@ -86,6 +89,7 @@ void AI()
       generation++;
       population = 0;
       GA.crossOver();
+      GA.initFitness();
     }
   }
 }

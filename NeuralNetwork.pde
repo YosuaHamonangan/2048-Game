@@ -2,7 +2,7 @@ class NeuralNetwork
 {
   float[][] wI2H, wH2O;
   int NInput = 16;
-  int NHidden = 10;
+  int NHidden = 25;
   int NOutput = 4;
   
   NeuralNetwork()
@@ -14,7 +14,7 @@ class NeuralNetwork
     {
       for(int m=0;m<NHidden;m++)
       {
-        wI2H[n][m] = random(-0.5,0.5);
+        wI2H[n][m] = random(-1,1);
       }
     }
     
@@ -22,7 +22,7 @@ class NeuralNetwork
     {
       for(int m=0;m<NOutput;m++)
       {
-        wH2O[n][m] = random(-0.5,0.5);
+        wH2O[n][m] = random(-1,1);
       }
     }
   }
@@ -60,7 +60,7 @@ class NeuralNetwork
   
   float ActivationFunc(float sum)
   {
-    float output = 1/(1+exp(-sum));
+    float output = 1.0/(1.0+exp(-sum));
     return output;
   }
   

@@ -42,17 +42,17 @@ class Display
     text("Score = " + str((int) vl.getScore()), SquarePosX, SquarePosY/2);
   }
   
-  void GenerationPopulation(int generation, int population, long maxScore)
+  void GenerationPopulation(int generation, int population, long maxScore, double fitness)
   {
     textAlign(LEFT, TOP);
     textSize(TextScoreSize);
     fill(255);
-    text("Gen = " + str(generation), SquarePosX+250, 0);
+    text("Gen = " + str(generation), SquarePosX + SquareN*SquareSize, SquarePosY);
     
-    textAlign(LEFT, BOTTOM);
-    text("Pop = " + str(population), SquarePosX+250, SquarePosY);
+    text("Pop = " + str(population), SquarePosX + SquareN*SquareSize, SquarePosY+ 100);
+
+    text("max Score = " + str((int)maxScore), SquarePosX + SquareN*SquareSize, SquarePosY+ 200);
     
-    textAlign(LEFT, CENTER);
-    text("Max Scr = " + str((int)maxScore), SquarePosX+450, SquarePosY/2);
+    text("Fitness = " + str((int)fitness), SquarePosX + SquareN*SquareSize, SquarePosY+ 300);
   }
 }

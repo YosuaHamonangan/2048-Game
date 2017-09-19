@@ -1,9 +1,25 @@
 class GeneticAlgorithm
 {
   int PopulationSize = 20;
-  float MutationRate = 0.0005;
+  float MutationRate = 0.01;
   NeuralNetwork[] NN = new NeuralNetwork[PopulationSize];
-  long[] Fitness = new long[PopulationSize];
+  double[] Fitness = new double[PopulationSize];
+  float[][] boardWeight = {{100.0,50.0,10.0,5.0},
+                          {-1.0,0.2,0.5,1.0},
+                          {-1.0,-1.0,-1.0,-1.0},
+                          {-1.0,-1.0,-1.0,-1.0}
+                          };
+  
+  /*float[][] boardWeight = {{5.0,10.0,50.0,100.0},
+                          {1.0,0.5,0.2,-1.0},
+                          {-1.0,-1.0,-1.0,-1.0},
+                          {-1.0,-1.0,-1.0,-1.0}
+                          };*/
+  /*float[][] boardWeight = {{-0.1,-0.1,-0.1,-0.1},
+                          {-0.1,-0.1,-0.1,-0.1},
+                          {0.4,0.3,0.2,-0.1},
+                          {0.5,1.0,5.0,100.0}
+                          };*/
   
   GeneticAlgorithm()
   {
@@ -11,16 +27,35 @@ class GeneticAlgorithm
     {
       NN[population] = new NeuralNetwork();
     }
+    initFitness();
   }
   
-  void setFitness(Long Score, int population)
+  void initFitness()
   {
-    Fitness[population] = Score;
+    for(int population=0;population<PopulationSize;population++)
+    {
+      Fitness[population] = 0;
+    }
+  }
+  
+  double setFitness(int[][] values, int population,int retry)
+  {
+    for(int row=0;row<values.length;row++)
+    {
+      for(int column=0;column<values[0].length;column++)
+      {
+        Fitness[population] += values[row][column]*boardWeight[row][column];
+        if(values[row][column]==0) Fitness[population]+=5;
+      }
+    }
+     Fitness[population] -= retry*100;
+    if (Fitness[population]<0) Fitness[population] =0;
+    return Fitness[population];
   }
   
   int[] ChooseParents()
   {
-    int totalFitness = 0;
+    double totalFitness = 0;
     for(int population=0;population<PopulationSize;population++)
     {
       totalFitness += Fitness[population];
@@ -30,16 +65,14 @@ class GeneticAlgorithm
     for(int parent=0;parent<2;parent++)
     {
       Parents[parent] = 0;
-      float selected = random(1);
+      double selected = random(1);
       while(selected>0 && Parents[parent]<PopulationSize)
       {
-        selected -= (float)Fitness[Parents[parent]]/totalFitness;
+        selected -= (double)Fitness[Parents[parent]]/totalFitness;
         Parents[parent]++;
       }
       Parents[parent]--;
     }
-    print("Parents = ");
-    println(Parents);
     return Parents;
   }
   
@@ -74,7 +107,7 @@ class GeneticAlgorithm
           }
           if(random(1)<MutationRate)
           {
-            wI2Hnew[population][InputLayer][HiddenLayer] += random(-0.1,0.1);
+            wI2Hnew[population][InputLayer][HiddenLayer] = random(-1,1);
           }
         }
       }
@@ -94,7 +127,7 @@ class GeneticAlgorithm
           }
           if(random(1)<MutationRate)
           {
-            wH2Onew[population][HiddenLayer][OutputLayer] += random(-0.1,0.1);
+            wH2Onew[population][HiddenLayer][OutputLayer] = random(-1,1);
           }
         }
       }
